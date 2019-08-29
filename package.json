@@ -6,6 +6,10 @@
   "scripts": {
     "start": "nodemon server.js"
   },
+  "engines": {
+    "node": "10.15.0",
+    "npm": "6.6.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/confetti/confetti-api-example.git"

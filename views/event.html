@@ -1,0 +1,19 @@
+<p><a href="/example">Back</a></p>
+
+<h2>{{event.name}}</h2>
+<h3>https://api.confetti.events/events/{{event.id}}</h3>
+
+<div class="ace">
+  {{eventResponseBody}}
+</div>
+
+<h2>Tickets</h2>
+<h3>https://api.confetti.events/events/{{event.id}}/tickets</h3>
+<ul>
+  {{#each tickets as |ticket|}}
+    <li><a href="/example/tickets/{{ticket.id}}">{{ticket.name}}</a></li>
+  {{/each}}
+</ul>
+<div class="ace">
+  {{ticketsResponseBody}}
+</div>

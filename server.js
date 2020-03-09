@@ -1,11 +1,22 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const Confetti = require('confetti')
+
+const API_KEY =
+  process.env.API_KEY || '2-8eaa3a790e8b08076a74ab0cb19473134f84493990b9550a'
+const API_HOST = process.env.API_HOST || 'api.confetti.events'
+const API_PROTOCOL = process.env.API_PROTOCOL || 'https'
+
+const confetti = new Confetti({
+  key: API_KEY,
+  host: API_HOST,
+  protocol: API_PROTOCOL
+})
 
 const app = express()
 const server = require('http').Server(app)
 
-const api = require('./app/api')
 const port = process.env.PORT || 3237
 
 app.engine('.html', exphbs({ extname: '.html' }))
@@ -16,64 +27,67 @@ app.use('/public', express.static('views'))
 app.use(bodyParser.json())
 
 app.get('/', async (req, res) => {
-  const event = await api.get('/events/23756')
+  const eventRaw = await confetti.events.find(23732, { raw: true })
+  const eventFormatted = await confetti.events.find(23732)
   return res.render('index', {
-    rawJson: JSON.stringify(event, null, 2),
-    yaysonJson: JSON.stringify(api.format(event), null, 2)
+    rawJson: JSON.stringify(eventRaw, null, 2),
+    yaysonJson: JSON.stringify(eventFormatted, null, 2)
   })
 })
 
 app.get('/example', async (req, res) => {
-  const events = await api.get('/events')
-  const eventsWithoutOrganisation = await api.get(
-    '/events?filter[hasOrganisation]=false'
-  )
-  const organisations = await api.get('/organisations')
+  const workspaces = await confetti.workspaces.findAll()
+  const events = await confetti.events.findAll()
+  const eventsWithoutWorkspace = await confetti.events.findAll({
+    filter: { hasWorkspace: false }
+  })
 
   return res.render('example', {
-    events: api.format(events),
-    eventsWithoutOrganisation: api.format(eventsWithoutOrganisation),
-    organisations: api.format(organisations),
+    events: events,
+    eventsWithoutWorkspace: eventsWithoutWorkspace,
+    workspaces: workspaces,
     eventsResponseBody: JSON.stringify(events, null, 2),
-    eventsWithoutOrganisationResponseBody: JSON.stringify(
-      eventsWithoutOrganisation,
+    eventsWithoutWorkspaceResponseBody: JSON.stringify(
+      eventsWithoutWorkspace,
       null,
       2
     ),
-    organisationsResponseBody: JSON.stringify(organisations, null, 2)
+    workspacesResponseBody: JSON.stringify(workspaces, null, 2)
   })
 })
 
-app.get('/example/organisations/:id', async (req, res) => {
-  const organisation = await api.get('/organisations/' + req.params.id)
-  const events = await api.get(
-    '/events?filter[organisationId]=' + req.params.id
-  )
-  return res.render('organisation', {
-    organisation: api.format(organisation),
-    events: api.format(events),
-    responseBody: JSON.stringify(organisation, null, 2),
+app.get('/example/workspaces/:id', async (req, res) => {
+  const workspace = await confetti.workspaces.find(req.params.id)
+  const events = await confetti.events.findAll({
+    filter: { workspaceId: req.params.id }
+  })
+  return res.render('workspace', {
+    workspace: workspace,
+    events: events,
+    responseBody: JSON.stringify(workspace, null, 2),
     eventsResponseBody: JSON.stringify(events, null, 2)
   })
 })
 
 app.get('/example/events/:id', async (req, res) => {
-  const event = await api.get('/events/' + req.params.id)
-  const tickets = await api.get('/events/' + req.params.id + '/tickets')
+  const event = await confetti.events.find(req.params.id)
+  const tickets = await confetti.tickets.findAll({
+    filter: { eventId: req.params.id }
+  })
   return res.render('event', {
-    event: api.format(event),
-    tickets: api.format(tickets),
+    event: event,
+    tickets: tickets,
     eventResponseBody: JSON.stringify(event, null, 2),
     ticketsResponseBody: JSON.stringify(tickets, null, 2)
   })
 })
 
 app.get('/example/tickets/:id', async (req, res) => {
-  const ticket = await api.get('/tickets/' + req.params.id)
+  const ticket = await confetti.tickets.find(req.params.id)
   return res.render('ticket', {
-    ticket: api.format(ticket),
+    ticket: ticket,
     responseBody: JSON.stringify(ticket, null, 2)
   })
 })
 
-server.listen(port)
+server.listen(port, () => console.log('Listening on ' + port))

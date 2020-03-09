@@ -2,15 +2,15 @@
 <p>
   Create an API key via the
   <a href="https://app.confetti.events/user/settings">user settings</a>
-  in the admin panel. Please note that this is only avaliable for
-  customers with our Business plan.
+  in the admin panel. Please note that this is only avaliable for customers with
+  our Business plan.
 </p>
 
 <h4>Url</h4>
 <p>
-  The API url is <code>https://api.confetti.events</code>
-  and you include the API key via the <code>header</code>
-  named <code>authorization</code>. See example below.
+  The API url is <code>https://api.confetti.events</code> and you include the
+  API key via the <code>header</code> named <code>authorization</code>. See
+  example below.
 </p>
 
 <h4>Endpoints</h4>
@@ -18,39 +18,32 @@
   <li><code>/events</code></li>
   <li><code>/events/&lt;id&gt;</code></li>
   <li><code>/events/&lt;id&gt;/tickets</code></li>
-  <li><code>/organisations</code></li>
-  <li><code>/organisations/&lt;id&gt;</code></li>
+  <li><code>/workspaces</code></li>
+  <li><code>/workspaces/&lt;id&gt;</code></li>
 </ul>
 
 <h4>Code & examples</h4>
 
 <p>
-  You can find <a href="/example">an example</a> of the API in action at this page and the 
-  source code is avaliable at <a href="https://github.com/confetti/confetti-public-api-docs">GitHub</a>.
+  You can find <a href="/example">an example</a> of the API in action at this
+  page and the source code is avaliable at
+  <a href="https://github.com/confetti/confetti-public-api-docs">GitHub</a>.
 </p>
 
 <h2>Data format</h2>
 <p>
   The data from the API is formatted in accordance with the
-  <a href="https://jsonapi.org/">JSON API specification</a>.
-  It's recommended to use a parser for transforming the data
-  before using it in your app, for example <a href="https://github.com/confetti/yayson">Yayson</a>
+  <a href="https://jsonapi.org/">JSON API specification</a>. It's recommended to
+  use a parser for transforming the data before using it in your app, for
+  example <a href="https://github.com/confetti/yayson">Yayson</a>
   built by us at Confetti and used internally in our apps.
 </p>
 <h4>Example</h4>
-<div class="ace">const request = require('request-promise');
-const {Store} = require('yayson')();
-const store = new Store();
-
-const data = await request({
-  uri: 'https://app.confetti.events/events',
-  headers: {
-    'authorization': 'apikey ' + API_KEY
-  },
-  json: true
-});
-
-const fotmattedData = store.sync(data);
+<div class="ace">
+  const request = require('request-promise'); const {Store} =
+  require('yayson')(); const store = new Store(); const data = await request({
+  uri: 'https://app.confetti.events/events', headers: { 'authorization': 'apikey
+  ' + API_KEY }, json: true }); const fotmattedData = store.sync(data);
 </div>
 
 <h4>Raw response</h4>

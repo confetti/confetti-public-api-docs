@@ -27,8 +27,8 @@ app.use('/public', express.static('views'))
 app.use(bodyParser.json())
 
 app.get('/', async (req, res) => {
-  const eventRaw = await confetti.events.find(23732, { raw: true })
-  const eventFormatted = await confetti.events.find(23732)
+  const eventRaw = await confetti.events.find(23756, { raw: true })
+  const eventFormatted = await confetti.events.find(23756)
   return res.render('index', {
     rawJson: JSON.stringify(eventRaw, null, 2),
     yaysonJson: JSON.stringify(eventFormatted, null, 2)
@@ -37,7 +37,7 @@ app.get('/', async (req, res) => {
 
 app.get('/example', async (req, res) => {
   const workspaces = await confetti.workspaces.findAll()
-  const events = await confetti.events.findAll()
+  const events = await confetti.events.findAll({ page: { size: 1 } })
   const eventsWithoutWorkspace = await confetti.events.findAll({
     filter: { hasWorkspace: false }
   })

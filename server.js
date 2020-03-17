@@ -27,8 +27,8 @@ app.use('/public', express.static('views'))
 app.use(bodyParser.json())
 
 app.get('/', async (req, res) => {
-  const eventRaw = await confetti.events.find(23756, { raw: true })
-  const eventFormatted = await confetti.events.find(23756)
+  const eventRaw = await confetti.events.find(23794, { raw: true })
+  const eventFormatted = await confetti.events.find(23794)
   return res.render('index', {
     rawJson: JSON.stringify(eventRaw, null, 2),
     yaysonJson: JSON.stringify(eventFormatted, null, 2)

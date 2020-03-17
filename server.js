@@ -37,21 +37,12 @@ app.get('/', async (req, res) => {
 
 app.get('/example', async (req, res) => {
   const workspaces = await confetti.workspaces.findAll()
-  const events = await confetti.events.findAll({ page: { size: 1 } })
-  const eventsWithoutWorkspace = await confetti.events.findAll({
-    filter: { hasWorkspace: false }
-  })
+  const events = await confetti.events.findAll()
 
   return res.render('example', {
     events: events,
-    eventsWithoutWorkspace: eventsWithoutWorkspace,
     workspaces: workspaces,
     eventsResponseBody: JSON.stringify(events, null, 2),
-    eventsWithoutWorkspaceResponseBody: JSON.stringify(
-      eventsWithoutWorkspace,
-      null,
-      2
-    ),
     workspacesResponseBody: JSON.stringify(workspaces, null, 2)
   })
 })

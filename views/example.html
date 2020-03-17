@@ -1,4 +1,4 @@
-<h2>Workspaces</h2>
+<h2>Workspace</h2>
 <h3>https://api.confetti.events/workspaces</h3>
 <ul>
   {{#each workspaces as |workspace|}}
@@ -20,15 +20,4 @@
 </ul>
 <div class="ace">
   {{eventsResponseBody}}
-</div>
-
-<h2>Events without workspace</h2>
-<h3>https://api.confetti.events/events?filter[hasWorkspace]=false</h3>
-<ul>
-  {{#each eventsWithoutWorkspace as |event|}}
-  <li><a href="/example/events/{{event.id}}">{{event.name}}</a></li>
-  {{/each}}
-</ul>
-<div class="ace">
-  {{eventsWithoutWorkspaceResponseBody}}
 </div>
